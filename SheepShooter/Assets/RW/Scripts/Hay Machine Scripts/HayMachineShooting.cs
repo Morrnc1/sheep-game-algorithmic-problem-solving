@@ -29,7 +29,7 @@ public class HayMachineShooting : MonoBehaviour
 
         void Shooting()
         {
-            GameObject.Instantiate(hayBalePrefab, haySpawnPoint.position + new Vector3(0, 0, -30), Quaternion.identity); // can add a vectore as long as you state new
+            GameObject.Instantiate(hayBalePrefab, haySpawnPoint.position + new Vector3(0, 2, 0), Quaternion.identity); // can add a vectore as long as you state new
 
         }
     }

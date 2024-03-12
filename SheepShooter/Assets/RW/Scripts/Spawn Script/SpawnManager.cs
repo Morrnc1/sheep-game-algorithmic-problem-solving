@@ -19,15 +19,9 @@ public class SpawnManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            canSpawn = !canSpawn;
-            if (canSpawn)
-                spawnCoroutine = StartCoroutine(SpawnRoutine());
-            else
-                StopCoroutine(spawnCoroutine);
-        }
+        
     }
+    
 
     IEnumerator SpawnRoutine()
     {

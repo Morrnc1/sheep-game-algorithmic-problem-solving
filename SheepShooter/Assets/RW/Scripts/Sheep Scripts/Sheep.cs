@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Sheep : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class Sheep : MonoBehaviour
 
     private void Awake()
     {
-        myCollider = GetComponent<BoxCollider>();
+        myCollider = GetComponent<CapsuleCollider>();
         myRigidbody = GetComponent<Rigidbody>();
     }
 
@@ -20,17 +21,17 @@ public class Sheep : MonoBehaviour
         this.target = targetObject;
     }
 
-    private void Update()
+   
+
+     private void Update()
     {
-        if (target != null)
-        {
-            Vector3 direction = (target.transform.position - transform.position).normalized;
-            transform.Translate(direction * runSpeed * Time.deltaTime);
-        }
+        // Move forwards
+        transform.Translate(Vector3.back * runSpeed * Time.deltaTime);
     }
 
     private void HitByHay()
     {
+        // where the sound and feedback goes
         Destroy(gameObject);
     }
 
@@ -40,17 +41,22 @@ public class Sheep : MonoBehaviour
         myRigidbody.isKinematic = false;
         myCollider.isTrigger = false;
         Destroy(gameObject, dropDestroyDelay);
+        Debug.Log("is this going bye");
     }
-
+    private Vector3 belowGround = new Vector3(-2,0,0);
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("does it get this far");
         if (other.CompareTag("Hay"))
         {
+            Debug.Log("compearng the tag working");
             Destroy(other.gameObject);
             HitByHay();
         }
-        else if (other.CompareTag("DropSheep") && !dropped)
+        else if ( == belowGround)
         {
+            Debug.Log("hit ground");
+            
             Drop();
         }
     }
