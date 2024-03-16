@@ -1,63 +1,55 @@
 ﻿using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.Events;
 
 public class Sheep : MonoBehaviour
 {
     public float runSpeed;
     public float dropDestroyDelay;
-    private bool dropped;
     private Collider myCollider;
     private Rigidbody myRigidbody;
-    public GameObject target; 
+    public float destroyY = -5f;
+
+    public UnityEvent OnHitByHay = new UnityEvent();
+    public UnityEvent OnDropped = new UnityEvent();
 
     private void Awake()
     {
-        myCollider = GetComponent<CapsuleCollider>();
+        myCollider = GetComponent<Collider>();
         myRigidbody = GetComponent<Rigidbody>();
     }
 
-    public void SetTarget(GameObject targetObject)
+    private void Update()
     {
-        this.target = targetObject;
-    }
-
-   
-
-     private void Update()
-    {
-        // Move forwards
         transform.Translate(Vector3.back * runSpeed * Time.deltaTime);
+
+        if (transform.position.y < destroyY)
+        {
+            Debug.Log("Hit ground");
+            Drop();
+        }
     }
 
     private void HitByHay()
     {
-        // where the sound and feedback goes
+        OnHitByHay.Invoke();
         Destroy(gameObject);
     }
 
     private void Drop()
     {
-        dropped = true;
-        myRigidbody.isKinematic = false;
-        myCollider.isTrigger = false;
+        OnDropped.Invoke();
         Destroy(gameObject, dropDestroyDelay);
-        Debug.Log("is this going bye");
+        Debug.Log("Is this going bye");
     }
-    private Vector3 belowGround = new Vector3(-2,0,0);
+
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("does it get this far");
+        Debug.Log("Does it get this far");
         if (other.CompareTag("Hay"))
         {
-            Debug.Log("compearng the tag working");
+            Debug.Log("Comparing the tag working");
             Destroy(other.gameObject);
             HitByHay();
-        }
-        else if ( == belowGround)
-        {
-            Debug.Log("hit ground");
-            
-            Drop();
         }
     }
 }

@@ -9,7 +9,7 @@ public class SpawnManager : MonoBehaviour
     public List<Transform> sheepSpawnPositions = new List<Transform>();
     public float timeBetweenSpawns = 5f;
 
-    private List<GameObject> sheepList = new List<GameObject>();
+    public List<Sheep> sheepList = new List<Sheep>(); //dont private things reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
     private Coroutine spawnCoroutine;
 
     void Start()
@@ -32,25 +32,47 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-  void SpawnSheep()
-{
-    if (sheepPrefab == null || sheepSpawnPositions.Count == 0)
+    void SpawnSheep()
     {
-        Debug.LogWarning("Sheep prefab or spawn positions not set!");
-        return;
+        if (sheepPrefab == null || sheepSpawnPositions.Count == 0)
+        {
+            Debug.LogWarning("Sheep prefab or spawn positions not set!");
+            return;
+        }
+
+        Transform spawnPoint = sheepSpawnPositions[Random.Range(0, sheepSpawnPositions.Count)];
+        GameObject newSheepObject = Instantiate(sheepPrefab, spawnPoint.position, Quaternion.identity);
+        Sheep newSheep = newSheepObject.GetComponent<Sheep>();
+        if (newSheep != null)
+        {
+            // Add event listeners to count and destroy sheep
+            newSheep.OnDropped.AddListener(() => HandleSheepDropped(newSheep));
+            newSheep.OnHitByHay.AddListener(() => HandleSheepHitByHay(newSheep));
+            sheepList.Add(newSheep);
+        }
+        else
+        {
+            Debug.LogWarning("Failed to get Sheep component from spawned sheep.");
+        }
     }
 
-    Transform spawnPoint = sheepSpawnPositions[Random.Range(0, sheepSpawnPositions.Count)];
-    GameObject newSheep = Instantiate(sheepPrefab, spawnPoint.position, Quaternion.identity);
-    sheepList.Add(newSheep);
-}
-
-    public void HandleSheepEvent(GameObject sheep)
+    private void HandleSheepDropped(Sheep sheep)
     {
         if (sheepList.Contains(sheep))
         {
             sheepList.Remove(sheep);
-            Destroy(sheep);
+            Destroy(sheep.gameObject);
+            Debug.Log("Sheep dropped and destroyed.");
+        }
+    }
+
+    private void HandleSheepHitByHay(Sheep sheep)
+    {
+        if (sheepList.Contains(sheep))
+        {
+            sheepList.Remove(sheep);
+            Destroy(sheep.gameObject);
+            Debug.Log("Sheep hit by hay and destroyed.");
         }
     }
 }
