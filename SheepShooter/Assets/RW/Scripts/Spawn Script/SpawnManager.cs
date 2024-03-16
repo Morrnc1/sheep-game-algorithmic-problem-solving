@@ -45,7 +45,6 @@ public class SpawnManager : MonoBehaviour
         Sheep newSheep = newSheepObject.GetComponent<Sheep>();
         if (newSheep != null)
         {
-            // Add event listeners to count and destroy sheep
             newSheep.OnDropped.AddListener(() => HandleSheepDropped(newSheep));
             newSheep.OnHitByHay.AddListener(() => HandleSheepHitByHay(newSheep));
             sheepList.Add(newSheep);

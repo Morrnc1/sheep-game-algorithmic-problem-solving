@@ -12,7 +12,6 @@ public class HayMachineMovement : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         float horizontalInput = Input.GetAxisRaw("Horizontal");

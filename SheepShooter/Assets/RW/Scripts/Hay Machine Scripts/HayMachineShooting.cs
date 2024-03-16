@@ -10,13 +10,11 @@ public class HayMachineShooting : MonoBehaviour
     public float shootCooldown = 0.5f;
     private float shootTimer = 0f;
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
                 shootTimer -= Time.deltaTime;
